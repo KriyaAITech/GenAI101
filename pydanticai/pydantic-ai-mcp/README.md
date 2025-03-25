@@ -3,6 +3,7 @@ We will be using PydanticAI to instantiate our Agent
 The mcp-servers used are
 1. mcp/brave-search  - https://github.com/modelcontextprotocol/servers/tree/main/src/brave-search
 2. mcp/github - https://github.com/modelcontextprotocol/servers/tree/main/src/github
+3. mcp/sequential-thinking - https://github.com/modelcontextprotocol/servers/tree/main/src/sequentialthinking
 
 The mcp-servers can be run using docker or npx. We have chosen to use docker.
 To run this repo as is, you will need to have docker installed. 
@@ -52,7 +53,6 @@ The OPENAI_API_KEY allows you to use llms from openai.
 Run the command using 'uv run main.py'. You will now have access to a chat loop in the terminal.
 You can converse with the agent as you normally would. Or you can give prompts which require the usage of tools (either from mcp/github or mcp/brave-search)
 
-Example prompt: 
 
 
 

@@ -9,7 +9,7 @@ To run this repo as is, you will need to have docker installed.
 
 # Steps to get this repo running:
 1. Clone this repo. (Consider giving it a star if you find it useful.)
-2. [Get mcp-servers up and running by installing docker and create mcp/brave-search and mcp/github docker images](/pydanticai/pydantic-ai-mcp#step1-clone-the-repo)
+2. [Get mcp-servers up and running by installing docker and create mcp/brave-search and mcp/github docker images](/pydanticai/pydantic-ai-mcp#step2-get-mcp-servers-up-and-running)
 3. Create a virtual environment and install project dependencies.
 4. Rename .env.example to .env and update your api keys. 
 Note: To use mcp/github, you will need a github key. And to use mcp/brave-search you will need brave-api-key
@@ -31,6 +31,29 @@ The better option is to build your own image from the repo by using the 'docker 
 
 4. Launch docker desktop and check the images you have built. The container will get instantiated only when you run python code.
 Note: Docker desktop application has to be launched. Only then docker containers will get instantiated when you run python code.
+
+## Step3: Create a virtual environment and install project dependencies
+I have used uv by astral-sh (https://github.com/astral-sh/uv), an efficient python project manager.
+I suggest you also use uv to install dependencies and maintain this project. However, you can still make do with pip and python virtual environments.
+
+1. First, make sure you have uv installed in your system.
+2. navigate into the project directory (pydantic-ai-mcp/) and run the command 'uv sync'.
+This should create a local .venv and install all dependencies in it automatically.
+
+## Step4: Rename .env.example to .env and update your api keys
+There is an .env.example file in the repo. First, rename the file to .env
+Then, add your api keys to this .env file.
+If you are using an OpenAI Model, the MODEL_NAME variable has to be set to "OPENAI_MODEL"
+If you are using an Google Gemini Model, the MODEL_NAME variable has to be set to "GEMINI_MODEL"
+The GEMINI_API_KEY or sometimes called as GOOGLE_API_KEY allows your to use llms from google ai studio.
+The OPENAI_API_KEY allows you to use llms from openai.
+
+## Step5: Run main.py
+Run the command using 'uv run main.py'. You will now have access to a chat loop in the terminal.
+You can converse with the agent as you normally would. Or you can give prompts which require the usage of tools (either from mcp/github or mcp/brave-search)
+
+Example prompt: 
+
 
 
 

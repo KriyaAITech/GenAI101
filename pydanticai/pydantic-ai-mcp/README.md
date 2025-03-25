@@ -1,3 +1,6 @@
+The chat loop part of the python script is taken from https://github.com/coleam00/ottomator-agents/blob/main/pydantic-ai-mcp-agent/pydantic_mcp_agent.py.
+So I want to give credit to **coleam00** for the initial idea of integrating mcp-servers with python code.
+
 This project is to demonstrate the use of mcp-servers with AI Agents. 
 We will be using PydanticAI to instantiate our Agent
 The mcp-servers used are

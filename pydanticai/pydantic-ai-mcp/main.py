@@ -49,9 +49,10 @@ async def chat_loop(agent: Agent) -> None:
             print(f"\nError: {str(e)}")
 
 
-#we want to connect two mcp-servers
+#we want to connect three wo mcp-servers
 # 1. mcp/github
 # 2. mcp/brave-search
+# 3. mcp/sequential-thinking
 # we are integrating mcp-server using the docker method. Not the npx method.
 async def main() -> None:
     # Create server parameters for all servers
@@ -81,6 +82,17 @@ async def main() -> None:
         env={"BRAVE_API_KEY": os.getenv("BRAVE_API_KEY")}
     )
 
+    # new mcp_server for sequential thinking
+    sequential_thinking_params = StdioServerParameters(
+        command=os.getenv("DOCKER_COMMAND", "docker"),
+        args = [
+        "run",
+        "--rm",
+        "-i",
+        "mcp/sequentialthinking"
+      ],
+    )
+
     # read environment variable MODEL_NAME from .env file. 
     # choose model based on MODEL_NAME
     model_name = os.getenv("MODEL_NAME")
@@ -93,21 +105,25 @@ async def main() -> None:
     # Use both servers in nested context managers
     async with stdio_client(github_params) as (github_read, github_write):
         async with stdio_client(brave_params) as (brave_read, brave_write):
-            async with (
-                ClientSession(github_read, github_write) as github_session,
-                ClientSession(brave_read, brave_write) as brave_session
-            ):
-                # Get tools from both sessions
-                github_tools = await mcp_tools.mcp_tools(github_session)
-                brave_tools = await mcp_tools.mcp_tools(brave_session)
-                
-                # Combine tools from both servers
-                combined_tools = github_tools + brave_tools
-                
-                agent = Agent(model, tools=combined_tools)
-                
-                # Start the interactive chat loop
-                await chat_loop(agent)
+            async with stdio_client(sequential_thinking_params) as (sequential_thinking_read, sequential_thinking_write):
+
+                async with (
+                    ClientSession(github_read, github_write) as github_session,
+                    ClientSession(brave_read, brave_write) as brave_session,
+                    ClientSession(sequential_thinking_read, sequential_thinking_write) as sequential_thinking_session
+                ):
+                    # Get tools from both sessions
+                    github_tools = await mcp_tools.mcp_tools(github_session)
+                    brave_tools = await mcp_tools.mcp_tools(brave_session)
+                    sequential_thinking_tools = await mcp_tools.mcp_tools(sequential_thinking_session)
+                    
+                    # Combine tools from both servers
+                    combined_tools = github_tools + brave_tools + sequential_thinking_tools
+                    
+                    agent = Agent(model, tools=combined_tools)
+                    
+                    # Start the interactive chat loop
+                    await chat_loop(agent)
 
 
 if __name__ == "__main__":

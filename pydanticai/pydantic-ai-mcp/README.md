@@ -9,7 +9,7 @@ To run this repo as is, you will need to have docker installed.
 
 # Steps to get this repo running:
 1. Clone this repo. (Consider giving it a star if you find it useful.)
-2. [Get mcp-servers up and running by installing docker and create mcp/brave-search and mcp/github docker images](/pydantic-ai-mcp#step1-clone-the-repo)
+2. [Get mcp-servers up and running by installing docker and create mcp/brave-search and mcp/github docker images](/pydanticai/pydantic-ai-mcp#step1-clone-the-repo)
 3. Create a virtual environment and install project dependencies.
 4. Rename .env.example to .env and update your api keys. 
 Note: To use mcp/github, you will need a github key. And to use mcp/brave-search you will need brave-api-key

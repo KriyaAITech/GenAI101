@@ -83,7 +83,7 @@ async def main() -> None:
     )
 
     # new mcp_server for sequential thinking
-    sequential_thinking_params = StdioServerParameters(
+    seq_params = StdioServerParameters(
         command=os.getenv("DOCKER_COMMAND", "docker"),
         args = [
         "run",
@@ -102,23 +102,23 @@ async def main() -> None:
     elif model_name == "GEMINI_MODEL":
         model = get_gemini_model()
         
-    # Use both servers in nested context managers
+    # Use all servers in nested context managers
     async with stdio_client(github_params) as (github_read, github_write):
         async with stdio_client(brave_params) as (brave_read, brave_write):
-            async with stdio_client(sequential_thinking_params) as (sequential_thinking_read, sequential_thinking_write):
+            async with stdio_client(seq_params) as (seq_read, seq_write):
 
                 async with (
                     ClientSession(github_read, github_write) as github_session,
                     ClientSession(brave_read, brave_write) as brave_session,
-                    ClientSession(sequential_thinking_read, sequential_thinking_write) as sequential_thinking_session
+                    ClientSession(seq_read, seq_write) as seq_session
                 ):
                     # Get tools from both sessions
                     github_tools = await mcp_tools.mcp_tools(github_session)
                     brave_tools = await mcp_tools.mcp_tools(brave_session)
-                    sequential_thinking_tools = await mcp_tools.mcp_tools(sequential_thinking_session)
+                    seq_tools = await mcp_tools.mcp_tools(seq_session)
                     
                     # Combine tools from both servers
-                    combined_tools = github_tools + brave_tools + sequential_thinking_tools
+                    combined_tools = github_tools + brave_tools + seq_tools
                     
                     agent = Agent(model, tools=combined_tools)
                     
